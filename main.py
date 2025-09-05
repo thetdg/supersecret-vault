@@ -19,7 +19,7 @@ VERSION = "1.0"
 
 class FileProcessorThread(QThread):
     progress_signal = pyqtSignal(int)
-    result_signal = pyqtSignal(int, int, int)
+    result_signal = pyqtSignal(int, int, int, str)
 
     def __init__(self, folder_name, password, operation):
         super().__init__()
@@ -89,7 +89,7 @@ class FileProcessorThread(QThread):
                 percent = int((processed / total_files) * 100)
                 self.progress_signal.emit(percent)
 
-        self.result_signal.emit(processed, success, skipped)
+        self.result_signal.emit(processed, success, skipped, self.operation.capitalize())
 
 
 class SuperSecretVaultGUI(QWidget):
@@ -159,8 +159,10 @@ class SuperSecretVaultGUI(QWidget):
             return
 
         if operation == "encrypt":
+            self.running_operation = "Encryption"
             password = self.prompt_password(confirm=True)
         else:
+            self.running_operation = "Decryption"
             password = self.prompt_password(confirm=False)
 
         if not password:
@@ -180,8 +182,8 @@ class SuperSecretVaultGUI(QWidget):
         self.thread.result_signal.connect(self.show_result)
         self.thread.start()
 
-    def show_result(self, processed, success, skipped):
-        QMessageBox.information(self, "Done",
+    def show_result(self, processed, success, skipped, operation):
+        QMessageBox.information(self, f"{operation}ion Done",
                                 f"Files processed: {processed}\n"
                                 f"Files successfully processed: {success}\n"
                                 f"Files skipped: {skipped}")
