@@ -1,7 +1,7 @@
 [project]
 name = "supersecret-vault"
 version = "0.1.0"
-description = "Add your description here"
+description = "A vault for storing encrypted files"
 requires-python = ">=3.13"
 dependencies = [
     "pyinstaller==6.19.0",
