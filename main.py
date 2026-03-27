@@ -159,10 +159,8 @@ class SuperSecretVaultGUI(QWidget):
             return
 
         if operation == "encrypt":
-            self.running_operation = "Encryption"
             password = self.prompt_password(confirm=True)
         else:
-            self.running_operation = "Decryption"
             password = self.prompt_password(confirm=False)
 
         if not password:
